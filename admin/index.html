@@ -68,16 +68,43 @@
     $('.level01:eq(1)').click(function(e) {
       // 当点击文章管理的时候，我们要将ul列表进行显示出来，slideToggle()这个方法的意思是说如果ul展开了，就收起来，如果是收起来的状态那就要点击的时候展开
       $('.level02').slideToggle();
-
     });
     // 需求三：
     // 点击左侧超链接添加高亮
     $('.level01').click(function() {
-      // 给当前点击的超链接添加高亮，其余的兄弟元素不加高亮，siblings()是获取兄弟元素
-      //   removeClass()是删除类名，addClass()是添加类名
-      // $(this)是表示当前点击的事件源
-      $(this).addClass('active').siblings().removeClass('active');
-    })
+        // 给当前点击的超链接添加高亮，其余的兄弟元素不加高亮，siblings()是获取兄弟元素
+        //   removeClass()是删除类名，addClass()是添加类名
+        // $(this)是表示当前点击的事件源
+        $(this).addClass('active').siblings().removeClass('active');
+      })
+      // 需求4：获取用户信息，将信息添加到左上角头像和右上角头像，我们还是使用ajax技术从服务器获取到用户信息
+    $.ajax({
+      // 设置请求方式
+      type: 'get',
+      //   设置请求地址
+      url: 'http://localhost:8080/api/v1/admin/user/info',
+      //   这个token的值要放到请求头中
+      headers: {
+        Authorization: window.localStorage.getItem('token'),
+      },
+      //   数据响应成功之后的回调函数
+      success: function(result) {
+        //   打印一下，看看服务器返回的result是个啥
+        console.log(result);
+        // 把获取到的用户头像和用户名在HTML页面中进行替换
+        // attr()是设置和获取标签中的属性的值
+        $('.user_info>img').attr('src', result.data.userPic);
+        // text()方法是获取和设置普通标签中的文本内容
+        $('.user_info>span').text('欢迎  ' + result.data.nickname);
+        // 设置右边的用户头像
+        $('.user_center_link>img').attr('src', result.data.userPic);
+      },
+      //   数据响应失败之后的回调函数
+      error: function() {
+        alert('请先登录');
+        window.location.href = './login.html';
+      }
+    });
   })
 </script>
 
