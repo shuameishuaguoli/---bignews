@@ -40,4 +40,36 @@
 
 </body>
 
+<!-- 需求4完成后台管理员的登录功能 -->
+<script>
+  $('.input_sub').click(function(e) {
+    // 因为这个按钮是用submit类型写的，所以要将submit的默认刷新行为禁止掉
+    e.preventDefault();
+    // 获取用户名 trim()方法是将字符串两端的空白符进行删除
+    var username = $('.input_txt').val().trim();
+    // 获取密码
+    var password = $('.input_pass').val().trim();
+    // 进行非空判断，如果用户名和用户密码有一个输入的为空就要提示用户
+    if (username === '' || password === '') {
+      alert('用户名或密码不得为空');
+      return;
+    }
+    $.ajax({
+      type: 'post',
+      url: 'http://localhost:8080/api/v1/admin/user/login',
+      data: {
+        username: username,
+        password: password,
+      },
+      success: function(result) {
+        if (result.code === 400) {
+          alert(result.msg);
+        } else if (result.code === 200) {
+          window.location.href = './index.html';
+        }
+      }
+    });
+  });
+</script>
+
 </html>
