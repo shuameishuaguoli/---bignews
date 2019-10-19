@@ -70,14 +70,14 @@
       $('.level02').slideToggle();
 
     });
-    // // 需求三：
-    // // 点击左侧超链接添加高亮
-    // $('.level01').click(function() {
-    //   // 给当前点击的超链接添加高亮，其余的兄弟元素不加高亮，siblings()是获取兄弟元素
-    //   //   removeClass()是删除类名，addClass()是添加类名
-    //   // $(this)是表示当前点击的事件源
-    //   $(this).addClass('active').siblings().removeClass('active');
-    // })
+    // 需求三：
+    // 点击左侧超链接添加高亮
+    $('.level01').click(function() {
+      // 给当前点击的超链接添加高亮，其余的兄弟元素不加高亮，siblings()是获取兄弟元素
+      //   removeClass()是删除类名，addClass()是添加类名
+      // $(this)是表示当前点击的事件源
+      $(this).addClass('active').siblings().removeClass('active');
+    })
   })
 </script>
 
