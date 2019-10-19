@@ -99,7 +99,7 @@
         // 设置右边的用户头像
         $('.user_center_link>img').attr('src', result.data.userPic);
       },
-      //   数据响应失败之后的回调函数
+      //   在没有登录的时候需要返回到登录页面，数据响应失败之后的回调函数
       error: function() {
         alert('请先登录');
         window.location.href = './login.html';
