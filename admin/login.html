@@ -40,8 +40,8 @@
 
 </body>
 
-<!-- 需求4完成后台管理员的登录功能 -->
 <script>
+  // <!-- 需求4完成后台管理员的登录功能 -->
   $('.input_sub').click(function(e) {
     // 因为这个按钮是用submit类型写的，所以要将submit的默认刷新行为禁止掉
     e.preventDefault();
@@ -51,20 +51,40 @@
     var password = $('.input_pass').val().trim();
     // 进行非空判断，如果用户名和用户密码有一个输入的为空就要提示用户
     if (username === '' || password === '') {
+      // 如果为空，就提示用户
       alert('用户名或密码不得为空');
+      // 并终结代码执行
       return;
     }
+    // 如果走到这，就说明用户名和用户密码都不是空的，我们使用ajax将用户名和密码传递到服务器
     $.ajax({
+      // 设置传递方式
       type: 'post',
+      // 调用接口http://localhost:8080/api/v1是基地址
       url: 'http://localhost:8080/api/v1/admin/user/login',
+      // 设置传递参数
       data: {
+        // 前面的键名是接口文档中的键名  后面的值是我们获取到的用户名和用户密码
         username: username,
         password: password,
       },
+      // 服务器响应后该做的事儿
       success: function(result) {
+        // code是返回的对象中的一个属性
         if (result.code === 400) {
+          // 如果用户名和用户密码是不对应的，我们要将result.msg的值放到alert中，用于提示用户
           alert(result.msg);
         } else if (result.code === 200) {
+          // 打印一下，看看如果用户名和用户密码输入正确的话，服务器返回的是个啥
+          // console.log(result);
+          /* 
+          code:200
+          msg:"登录成功"
+          token:"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiYWRtaW4iLCJleHAiOjIxNzYyNzAzNjYsImlhdCI6MTU3MTQ3MDM2Nn0.xlZaK4gp9TpAPxE5YSxwG8WeyCn0ksHE5r7YEw77IbYHvp1tEF_qLd2FpPV3TeIhmF2_M78BN93uKIq8VMDhvrtKiOIkeca24NA6iCo8xwWJi76Jm9_Ug5hqu4SO0AxcggbD4NBm0mfzQq_x31HtmMsbH2-82nKl_iQ3U23RpgU"
+           */
+          //  将获取到的token的值存放到本地中，以localStorage的方式进行存储
+          window.localStorage.setItem('token', result.token);
+          // 如果用户名和用户密码是对应的，那么就跳到后台首页的页面
           window.location.href = './index.html';
         }
       }
