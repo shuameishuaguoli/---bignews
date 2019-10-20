@@ -103,10 +103,26 @@
       },
       //   在没有登录的时候需要返回到登录页面，数据响应失败之后的回调函数
       // 这个时候异常处理也要是放到了jQuery的源文件中，因为每次都要查看用户是否登录，如果每次在页面写，是很麻烦的，所以要使用$.ajaxStemp({})需要配置一下全局ajax的配置
-      // error: function() {
-      //   alert('请先登录');
-      //   window.location.href = './login.html';
-      // }
+      error: function() {
+        alert('请先登录');
+        window.location.href = './login.html';
+      }
+    });
+    // 需求4：点击左侧li标签的时候需要添加字体颜色，橘黄色
+    $('.level02 li').click(function() {
+      // 使用jQuery中的链式编程
+      $(this).addClass('active').siblings().removeClass('active');
+    });
+    // 需求5：点击退出按钮，消除本地token值并且跳转到登录页面
+    $('.logout').click(function() {
+      // 为了用户体验，当用户点击了退出按钮的时候需要给用户一个询问，询问用户是否真的需要退出登录
+      var tui = confirm('确定要退出吗？');
+      if (tui) {
+        // 点击退出，清除本地token值
+        window.localStorage.removeItem('token');
+        // 并且回到登录页
+        window.location.href = './login.html';
+      }
     });
   })
 </script>

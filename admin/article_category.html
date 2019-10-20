@@ -10,7 +10,9 @@
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/iconfont.css">
   <link rel="stylesheet" href="css/main.css">
+  <!-- 加载jQueryjs文件 -->
   <script src="./libs/jquery-1.12.4.min.js"></script>
+  <!-- 加载bootstrapjs文件 -->
   <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
   <!-- 引入模板引擎js文件 -->
   <script src="./libs/template-web.js"></script>
@@ -43,12 +45,119 @@
         <tfoot>
           <tr>
             <td colspan="3" class="text-center">
-              <a href="javascript:void(0)" class="btn btn-success" id="xinzengfenlei" data-toggle="modal" data-target="#myModal">新增分类</a>
+              <a href="javascript:void(0)" class="btn btn-success data-fenlei" id="xinzengfenlei" data-toggle="modal" data-target="#myModal">新增分类</a>
             </td>
           </tr>
         </tfoot>
       </table>
     </div>
   </div>
+  <!-- 模态框start -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">新增分类</h4>
+        </div>
+
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="exampleInputEmail1">分类名称</label>
+              <input type="text" class="form-control fenlei-name" id="exampleInputEmail1">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">分类别名</label>
+              <input type="text" class="form-control fenlei-bieming" id="exampleInputPassword1">
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary data-xinzeng">新增</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 模态框end -->
+</body>
+<script type="text/html" id="text">
+  <!-- each是模板引擎中的循环遍历的意思 data是result中的一个对象类型 -->
+  {{ each data}}
+  <tr>
+    <td>{{$value.name}}</td>
+    <td>{{$value.slug}}</td>
+    <td class="text-center">
+      <a href="javascript:void(0);" data-toggle="modal" class=" btn btn-info btn-xs">编辑</a>
+      <a href="javascript:void(0);" class="btn btn-danger btn-xs btn-del" data-id="{{$value.id}}">删除</a>
+    </td>
+  </tr>
+  {{ /each }}
+</script>
+<script>
+  // 将分类管理的逻辑代码进行封装，因为后面还要用到这个逻辑，所以要封装起来，方便调用
+  function xuanran() {
+    // 需求1：加载页面的时候就要获取数据库中的所有的文章类别
+    $.ajax({
+      // 设置请求类型
+      type: 'get',
+      // 设置url请求地址
+      url: BigNew.category_list,
+      success: function(result) {
+        console.log(result.data);
+        // 调用模板引擎的template方法，这个方法中需要有两个参数，带一个参数是模板的id值，第二个参数必须是
+        var str = template('text', result);
+        // 在tbody标签中添加遍历出来的对象
+        $('tbody').html(str);
+      },
+      //   登录异常处理
+      // error: function(result) {
+      //   console.log(result);
+      //   alert('请先登录');
+      //   window.location.href = './login.html';
+      // }
+    });
+  }
+  // 调用渲染的数据的方法
+  xuanran();
+
+
+  // 需求2：点击新增分类的时候需要需要弹出一个框框，需要让用户输入信息，给新增分类添加一个点击事件
+  $('.data-xinzeng').click(function() {
+    // 点击新增按钮的时候，需要将用户填写的内容获取到并添加到分类中BigNew.category_add
+    var name = $('.fenlei-name').val();
+    var sulg = $('.fenlei-bieming').val();
+    console.log(name, sulg);
+    $.ajax({
+      // 设置url接口地址
+      url: BigNew.category_add,
+      // 设置请求方式
+      type: 'post',
+      // 设置请求参数
+      data: {
+        name: name,
+        sulg: sulg,
+      },
+      success: function(result) {
+        console.log(result);
+      }
+    });
+    // 点击新增的时候，将模态框进行隐藏
+    $('#myModal').modal('hide');
+  });
+
+  // 需求：点击删除按钮需要将本条数据进行删除
+  // 分析：因为这些数据是在页面刷新的时候有了ajax请求之后从数据库中获取到的数据，后面还会增加数据，所以这个点击删除的功能我们需要用时间委托的思路来做，我们要将点击事件委托给tbody来做，就可以啦，其实只要给tr的父元素就可以
+  $('tbody').on('click', '.btn-del', function(e) {
+      var lei_name = e.target.className.indexOf('btn-del');
+      if (lei_name == 22) {
+        $(this).parents('li').remove();
+      }
+    })
+    //
+</script>
+
 
 </html>
