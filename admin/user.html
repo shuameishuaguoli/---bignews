@@ -98,7 +98,11 @@
         var file = this.files[0];
         // 打印一下这个file
         // console.log(file);
-
+        var url = URL.createObjectURL(file);
+        // 打印一下这个url
+        // console.log(url);
+        // 然后把这个url给到img标签中的src属性
+        $('.user_pic').attr('src', url);
       });
     }
   });
