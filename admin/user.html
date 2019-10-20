@@ -61,7 +61,8 @@
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-success btn-edit">修改</button>
+            <!-- btn-modify这是我自己添加的一个自定义属性为了方便直接获取到这个修改按钮 -->
+            <button type="submit" class="btn btn-success btn-edit btn-modify">修改</button>
           </div>
         </div>
       </form>
@@ -81,14 +82,19 @@
     success: function(result) {
       // 获取到的result是对象类型，这个对象下面有一个data属性，data的类型也是类型，所以取数据的时候是result.data.username的形式去获取数据
       console.log(result);
-      //   在页面设置用户名
-      $('.username').val(result.data.username);
-      //   在页面设置用户名称
-      $('.nickname').val(result.data.nickname);
-      //   在页面设置用户email
-      $('.email').val(result.data.email);
-      //   在页面设置用户密码
-      $('.password').val(result.data.password);
+      // //   在页面设置用户名
+      // $('.username').val(result.data.username);
+      // //   在页面设置用户名称
+      // $('.nickname').val(result.data.nickname);
+      // //   在页面设置用户email
+      // $('.email').val(result.data.email);
+      // //   在页面设置用户密码
+      // $('.password').val(result.data.password);
+      // 因为获取到的result.data是一个对象类型，所以我们可以使用forin来对这个对象进行遍历 key的意思是用来接收result.data的每一项的值
+      for (const key in result.data) {
+        // 对象也可以点语法，也可以中括号获取到key的值
+        $('.' + key).val(result.data[key]);
+      }
       //   图片比较特殊，因为图片是src中的地址，src是img标签的固有属性
       $('.user_pic').attr('src', result.data.userPic);
       //   当文件input框中的内容改变的时候我要给图片创建一个url地址，然后将这个url地址给到img的标签
@@ -105,6 +111,43 @@
         $('.user_pic').attr('src', url);
       });
     }
+  });
+
+  // 需求：当用户点击修改按钮的时候需要获取到form表单中的信息，并将用户的信息更新到服务器的数据库中
+  // 所以我们要给给修改按钮添加点击事件
+  $('.btn-modify').click(function(e) {
+    // 因为这个修改按钮使用submit的类型做的，所以我们要将将submi的默认行为禁止掉
+    e.preventDefault();
+    //  当用户点击到修改按钮的时候需要获取到表单中所有的数据
+    // 所以我们要实例化一个表单对象，这个表单对象中需要传一个参数，这个参数代表的是整个的form表单，一般一个form表单中都有一个id用来表示这个form表单
+    var form = document.querySelector('#form');
+    // form对象中的这个传的参数必须是DOM对象
+    var data = new FormData(form);
+    // console.log(data);
+    // 使用ajax技术将获取到的用户信息上传到服务器的数据库中
+    $.ajax({
+      // url请求地址
+      url: BigNew.user_edit,
+      // 请求类型
+      type: 'post',
+      // 请求参数必须是formdata类型的
+      data: data,
+      // 这里需要注意：如果formdata实例对象和ajax结合使用的时候，需要添加这两个属性，
+      // 不设置类型
+      contentType: false,
+      // 不需要处理数据
+      processData: false,
+      success: function(result) {
+        // 查看一下服务器响应回来的时候是个什么鬼
+        console.log(result);
+        if (result.code == 200) {
+          // 如果用户更新成功的时候，要给用户一个提示
+          alert(result.msg);
+          // 并且将iframe外的页面也要刷新一下，要和更新后的用户名和密码保持一致
+          window.parent.location.reload();
+        }
+      }
+    });
   });
   //
 </script>
