@@ -90,7 +90,16 @@
       //   在页面设置用户密码
       $('.password').val(result.data.password);
       //   图片比较特殊，因为图片是src中的地址，src是img标签的固有属性
+      $('.user_pic').attr('src', result.data.userPic);
+      //   当文件input框中的内容改变的时候我要给图片创建一个url地址，然后将这个url地址给到img的标签
+      $('#exampleInputFile').change(function() {
+        // 获取一下上传的文件files是一个伪数组
+        // console.log(this.files[0]);
+        var file = this.files[0];
+        // 打印一下这个file
+        // console.log(file);
 
+      });
     }
   });
   //
