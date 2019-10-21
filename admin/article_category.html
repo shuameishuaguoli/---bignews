@@ -188,21 +188,45 @@
   });
 
 
-
-
-
-
-
   // 需求：点击删除按钮需要将本条数据进行删除
   // 分析：因为这些数据是在页面刷新的时候有了ajax请求之后从数据库中获取到的数据，后面还会增加数据，所以这个点击删除的功能我们需要用时间委托的思路来做，我们要将点击事件委托给tbody来做，就可以啦，其实只要给tr的父元素就可以
   $('tbody').on('click', '.btn-del', function(e) {
-      var lei_name = e.target.className.indexOf('btn-del');
-      if (lei_name == 22) {
-        $(this).parents('li').remove();
+      // 先将页面上的内容进行删除
+      // var lei_name = e.target.className.indexOf('btn-del');
+      // if (lei_name == 22) {
+      //   $(this).parents('tr').remove();
+      // }
+      // 我们还要获取当前点击删除按钮上的id值
+      var id = this.getAttribute('data-id');
+      // 打印一下获取到的id值
+      // console.log(id);
+      // 当用户点击了删除按钮我们询问一下用户
+      var queding = confirm('确定要删除数据吗？');
+      // 如果用户是误点的，那么就直接return就可以啦
+      if (!queding) {
+        return;
+      } else {
+        // 我们使用ajax技术将这个id值传到服务器
+        $.ajax({
+          // 设置请求接口地址
+          url: BigNew.category_delete,
+          // 设置请求方式
+          type: 'post',
+          // 设置请求参数
+          data: {
+            id: id,
+          },
+          // 响应服务器的数据
+          success: function(result) {
+            // 重新刷新页面数据
+            xuanran();
+            // 并给用户一个友好提示
+            alert('数据删除成功！！');
+          }
+        });
       }
     })
     //
 </script>
-
 
 </html>
