@@ -106,47 +106,92 @@
       // 设置url请求地址
       url: BigNew.category_list,
       success: function(result) {
-        console.log(result.data);
+        // console.log(result.data);
         // 调用模板引擎的template方法，这个方法中需要有两个参数，带一个参数是模板的id值，第二个参数必须是
         var str = template('text', result);
         // 在tbody标签中添加遍历出来的对象
         $('tbody').html(str);
-      },
-      //   登录异常处理
-      // error: function(result) {
-      //   console.log(result);
-      //   alert('请先登录');
-      //   window.location.href = './login.html';
-      // }
+      }
     });
-  }
-  // 调用渲染的数据的方法
+  };
+  // 调用渲染数据的方法
   xuanran();
 
 
   // 需求2：点击新增分类的时候需要需要弹出一个框框，需要让用户输入信息，给新增分类添加一个点击事件
+  // $('.data-xinzeng').click(function() {
+  //   // 点击新增按钮的时候，需要将用户填写的内容获取到并添加到分类中
+
+  //   var name = $('.fenlei-name').val().trim();
+  //   var sulg = $('.fenlei-bieming').val().trim();
+  //   console.log(name, sulg);
+  //   $.ajax({
+  //     // 设置url接口地址
+  //     url: BigNew.category_add,
+  //     // 设置请求方式
+  //     type: 'post',
+  //     // 设置请求参数
+  //     data: {
+  //       name: name,
+  //       sulg: sulg,
+  //     },
+  //     success: function(result) {
+  //       console.log(result);
+
+  //       // 点击新增的时候，将模态框进行隐藏
+  //       $('#myModal').modal('hide');
+  //     }
+  //   });
+  // });
+
+
+  // 需求：当我点击新增分类按钮的时候，需要跳出一个模态框，给用户填写数据并提交数据，最后点击提交的时候还要关闭模态框，来我们先给新增分类按钮添加点击事件，点击新增按钮显示模态框bootstrap已经帮我们做好了，我们只需要做新增的工作就可以啦
   $('.data-xinzeng').click(function() {
-    // 点击新增按钮的时候，需要将用户填写的内容获取到并添加到分类中BigNew.category_add
-    var name = $('.fenlei-name').val();
-    var sulg = $('.fenlei-bieming').val();
-    console.log(name, sulg);
+    //   获取form表单的DOM节点
+    //var form = document.querySelector('#new_zeng');
+    //   当点击新增按钮的时候，需要获取到用户输入的分类名称和分类别名的内容，因为用户输入的内容是一个表单格式，所以我们要使用formdata来获取form表单中的信息，我们要先实例化一个formdata的一个实例对象，这个对象中需要传一个参数，这个参数就是获取到的form表单，这个对象的类型一定要是一个DOM节点类型
+    //var fdata = new FormData(form);
+
+    var fenlei_name = $('.fenlei-name').val().trim();
+    var data_fenleibieming = $('.fenlei-bieming').val().trim();
+    // 打印一下，看看能不能获取到用户输入框中的内容
+    // console.log(fenlei_name, data_fenleibieming);
+    // 我们使用ajax技术将获取到的内容传递到服务器
     $.ajax({
-      // 设置url接口地址
+      // 设置请求方式
       url: BigNew.category_add,
       // 设置请求方式
       type: 'post',
-      // 设置请求参数
+      //   设置请求参数
       data: {
-        name: name,
-        sulg: sulg,
+        name: fenlei_name,
+        slug: data_fenleibieming,
       },
+      //   特别注意：如果formdata类型的数据和ajax联合使用的时候需要添加这两个参数，否则控制台就会报错
+      // 不设置类型
+      //   contentType: false,
+      // 不处理获取的数据
+      //   processData: false,
+      //   响应成功后，接收服务器响应的数据
       success: function(result) {
+        //   打印一下，看看是否添加成功
         console.log(result);
+        // 添加成功之后需要将两个输入框中的内容进行清空
+        $('.data-fenleiname').val('');
+        $('.data-fenleibieming').val('');
+        // 点击了之后需要将模态框隐藏
+        $('#myModal').modal('hide');
+        // 调用显示分类的方法，将新添加的类别显示到页面上
+        xuanran();
       }
     });
-    // 点击新增的时候，将模态框进行隐藏
-    $('#myModal').modal('hide');
   });
+
+
+
+
+
+
 
   // 需求：点击删除按钮需要将本条数据进行删除
   // 分析：因为这些数据是在页面刷新的时候有了ajax请求之后从数据库中获取到的数据，后面还会增加数据，所以这个点击删除的功能我们需要用时间委托的思路来做，我们要将点击事件委托给tbody来做，就可以啦，其实只要给tr的父元素就可以
