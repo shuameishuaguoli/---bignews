@@ -26,13 +26,14 @@
         <div class="col-xs-6">
           <form class="form-inline">
             <select id="selCategory" name="" class="form-control input-sm fenlei">
+                <!-- 所有分类的位置 -->
                         </select>
-            <select id="selStatus" name="" class="form-control input-sm">
+            <select id="selStatus" name="" class="form-control input-sm state">
                             <option value="">所有状态</option>
                             <option value="草稿">草稿</option>
                             <option value="已发布">已发布</option>
                         </select>
-            <button id="btnSearch" class="btn btn-default btn-sm">筛选</button>
+            <button id="btnSearch" class="btn btn-default btn-sm screen">筛选</button>
           </form>
         </div>
         <div class="col-xs-6">
@@ -51,17 +52,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>王积千造统最头</td>
-            <td>杰克</td>
-            <td>奇趣事</td>
-            <td class="text-center">2017-06-08 07:08:46</td>
-            <td class="text-center">已发布</td>
-            <td class="text-center">
-              <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
-              <a href="javascript:void(0);" class="btn btn-danger btn-xs delete">删除</a>
-            </td>
-          </tr>
+          <!-- tr内容放置的位置 -->
         </tbody>
       </table>
       <div class="row text-center">
@@ -69,18 +60,36 @@
     </div>
   </div>
 </body>
-<!-- 定义引擎模板 -->
+<!-- 给所有分类  定义引擎模板  -->
+<!-- 渲染数据的时候还需要将获取到的id值渲染到option中的value属性中 -->
 <script type="text/html" id="all_fenlei">
   <option value="">所有分类</option>
   {{each data}}
-  <option>{{$value.name}}</option>
+  <option value="{{$value.id}}">{{$value.name}}</option>
   {{ /each }}
+</script>
+
+<!-- 给获取到文章内容定义模板 -->
+<script type="text/html" id="all_wenzhang">
+  {{each data.data}}
+  <tr>
+    <td>{{$value.title}}</td>
+    <td>{{$value.author}}</td>
+    <td>{{$value.category}}</td>
+    <td class="text-center">{{$value.date}}</td>
+    <td class="text-center">{{$value.state}}</td>
+    <td class="text-center">
+      <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
+      <a href="javascript:void(0);" class="btn btn-danger btn-xs delete">删除</a>
+    </td>
+  </tr>
+  {{/each}}
 </script>
 
 <script>
   // 
   $(function() {
-      // 使用ajax请求服务器获取所有分类
+      // 需求：使用ajax请求服务器获取所有分类，并将获取到的分类渲染到页面所有分类的下拉列表中
       $.ajax({
         url: BigNew.category_list,
         success: function(result) {
@@ -91,6 +100,57 @@
           $('.fenlei').html(str);
         }
       });
+
+
+      //   需求：加载页面的时候需要获取所有文章数据
+      $.ajax({
+        //   设置url接口地址
+        url: BigNew.article_query,
+        // 设置请求方式
+        type: 'get',
+        // 响应服务器的数据
+        success: function(result) {
+          console.log(result);
+          //   调用template()方法，第一个参数是定义模板的id名，第二个参数是获取的数据
+          var str = template('all_wenzhang', result);
+          //   console.log(str);
+          //   将获取到的内容添加到tbody中
+          $('tbody').html(str);
+        }
+      });
+
+      //   需求：当我们点击筛选按钮的时候需要根据分类和状态来显示所对应的文章
+      $('.screen').click(function(e) {
+        // 将按钮的默认行为禁止掉
+        e.preventDefault();
+        // 获取所有分类select的标签中的value值，这里要注意，获取select中的value值的时候也是使用val()这个方法
+        var type = $('#selCategory').val();
+        var state = $('.state').val();
+        // 打印一下，看看是否能获取到两个下拉列表中的内容
+        // console.log(type, state);
+        $.ajax({
+          // 设置请求接口
+          url: BigNew.article_query,
+          // 设置请求方式
+          type: 'get',
+          // 设置请求参数
+          data: {
+            type: type,
+            state: state,
+          },
+          success: function(result) {
+            // console.log(result);
+            // 我们将获取到的数据渲染到页面上，还是使用模板引擎来将获取到的内容渲染到页面上
+            var str = template('all_wenzhang', result);
+            //   将获取到的内容添加到tbody中
+            $('tbody').html(str);
+          }
+        });
+      });
+
+
+
+
     })
     //
 </script>
