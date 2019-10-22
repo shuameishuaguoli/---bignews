@@ -25,12 +25,7 @@
       <div class="row opt_btns">
         <div class="col-xs-6">
           <form class="form-inline">
-            <select id="selCategory" name="" class="form-control input-sm">
-                            <option value="">所有分类</option>
-                            <!-- <option>未分类</option>
-                            <option>奇趣事</option>
-                            <option>会生活</option>
-                            <option>爱旅行</option> -->
+            <select id="selCategory" name="" class="form-control input-sm fenlei">
                         </select>
             <select id="selStatus" name="" class="form-control input-sm">
                             <option value="">所有状态</option>
@@ -76,16 +71,28 @@
 </body>
 <!-- 定义引擎模板 -->
 <script type="text/html" id="all_fenlei">
-  {{each }}
-  <option></option>
+  <option value="">所有分类</option>
+  {{each data}}
+  <option>{{$value.name}}</option>
   {{ /each }}
 </script>
 
 <script>
   // 
-  // 使用ajax请求服务器获取所有分类
-
-  //
+  $(function() {
+      // 使用ajax请求服务器获取所有分类
+      $.ajax({
+        url: BigNew.category_list,
+        success: function(result) {
+          console.log(result);
+          var str = template('all_fenlei', result);
+          //   打印一下，看看能不能将响应的内容获取到
+          //   console.log(str);
+          $('.fenlei').html(str);
+        }
+      });
+    })
+    //
 </script>
 
 </html>
