@@ -95,6 +95,8 @@
         <div class="modal-body">
           <form>
             <div class="form-group">
+              <!-- 在编辑的模态框中添加一个隐藏域 用来存放id-->
+              <input type="hidden" class="hidd">
               <label for="exampleInputEmail1">分类名称</label>
               <input type="text" class="form-control edit-name">
             </div>
@@ -107,7 +109,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-success data-xinzeng">修改</button>
+          <button type="button" class="btn btn-success data-xiugai">修改</button>
         </div>
       </div>
     </div>
@@ -236,7 +238,7 @@
     // 当我点击编辑按钮的时候需要获取到当前编辑按钮上的自定义属性data-id的值
     var id = $(this).attr('data-id');
     // 这里打印一下获取到的id值
-    console.log(id);
+    // console.log(id);
     // 将获取到的id值，利用ajax技术将这个id进行传入服务器
     $.ajax({
       // 设置请求地址   BigNew.category_edit,
@@ -255,12 +257,47 @@
         // 将从服务器响应回来的数据填写到编辑的模态框中
         $('.edit-name').val(result.data[0].name);
         $('.edit-bieming').val(result.data[0].slug);
+        $('.hidd').val(result.data[0].id);
         // 要先将服务器响应回来的内容添加到模态框中，在显示模态框
         $('#editModal').modal('show');
       }
     });
 
-
+    // 需求：点击修改按钮的时候，需要将模态框中的数据发送到服务器中
+    $('.data-xiugai').click(function() {
+      // 点击修改的时候，需要获取到模态框中的隐藏域中的id值，和分类名称和分类别名的内容，将获取到的内容通过ajax技术发送到服务器，并将当前页面的内容进行刷新，调用 xuanran();这个方法
+      // 获取隐藏域中的内容
+      var id = $('.hidd').val();
+      // 获取分类名称input框中的内容
+      var name = $('.edit-name').val();
+      // 获取分类别名input框中的内容
+      var slug = $('.edit-bieming').val();
+      // 打印一下看看能不能获取内容
+      // console.log(id, name, slug);
+      // 使用ajax方法想服务器请求数据
+      $.ajax({
+        // 设置url接口地址
+        url: BigNew.category_edit,
+        // 设置请求方式
+        type: 'post',
+        // 设置请求参数
+        data: {
+          id: id,
+          name: name,
+          slug: slug,
+        },
+        success: function(result) {
+          // console.log(result);
+          if (result.code == 200) {
+            alert('信息更改成功');
+            // 调用渲染所有信息的方法
+            xuanran();
+            // 点击了修改按钮要将模态框进行隐藏
+            $('#editModal').modal('hide');
+          }
+        }
+      });
+    });
   });
 </script>
 
