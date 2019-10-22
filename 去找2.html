@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    div {
+      margin: 0;
+      padding: 0;
+      height: 400px;
+      background-color: #f0f;
+      border: 10px solid red;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <h1>我是2</h1>
+  </div>
+</body>
+<script>
+  // 需求:获取地址栏中的参数
+  //   这一步是获取到了?请求参数
+  //   var str = window.location.search.slice(1);
+  //   // 需要把&去掉
+  //   str = str.split('&');
+  //   //   定义一个空对象
+  //   var obj = {};
+  //   console.log(str); //   ["name=zhangsan", "age=6"]
+  //   //   使用for循环遍历这个数据
+  //   for (var i = 0; i < str.length; i++) {
+  //     // 获取每一项，将每一项又组成了一个数组
+  //     var xiang = str[i].split('=');
+  //     // console.log(xiang);
+  //     // 对象中的每个键就是遍历出来的数组中的第一个值，
+  //     // 对象中的值，就是数组中的第二个值
+  //     obj[xiang[0]] = xiang[1];
+  //   }
+  //   console.log(obj);
+</script>
+
+<script>
+  // 先获取到？参数  window.loaction.search不是一个方法，而是属性
+  var str = window.location.search;
+  //   从下标是1的内容，一直截取到最后，返回的是一个全新的字符串
+  str = str.slice(1);
+  //   将&符号删掉 split()方法返回值是一个数组
+  str = str.split('&');
+  //  因为我们最后得到的是一个对象类型的，所以我们要先定义一个空对象
+  var obj = {};
+  // 因为split()方法的返回值是一个数组，所以我们要使用for循环来对这个数据进行遍历一下，遍历的过程中，需要将遍历出来的数据添加到对象里面去
+  //   ["name=zhangsan", "age=6", "sex=nv", "height=168", "width=80"]
+  for (var i = 0; i < str.length; i++) {
+    // 现在我们要将每一项都去掉等号= ,split()这个方法返回的是一个数组
+    var xiang = str[i].split('=');
+    // 我们在这里可以查看一下，将等号=去除之后是一个什么样的数据，遍历出来的是一个一个的数组
+    /* 
+         ["name", "zhangsan"]
+         ["age", "6"]
+         ["sex", "nv"]
+         ["height", "168"]
+         ["width", "80"]
+     */
+    // console.log(xiang);
+    // 现在我们要将数组中的数据添加到刚才声明好的对象中
+    // 这句代码的意思是：数组中的第一个元素做对象的键名，数组中的第二个元素是做对象的值，这样obj这个对象中的内容就是我们需要的键值对的形式了
+    obj[xiang[0]] = xiang[1];
+  }
+  console.log(obj);
+</script>
+
+</html>
