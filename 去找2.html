@@ -44,32 +44,61 @@
 </script>
 
 <script>
-  // 先获取到？参数  window.loaction.search不是一个方法，而是属性
+  // // 先获取到？参数  window.loaction.search不是一个方法，而是属性
+  // var str = window.location.search;
+  // //   从下标是1的内容，一直截取到最后，返回的是一个全新的字符串
+  // str = str.slice(1);
+  // //   将&符号删掉 split()方法返回值是一个数组
+  // str = str.split('&');
+  // //  因为我们最后得到的是一个对象类型的，所以我们要先定义一个空对象
+  // var obj = {};
+  // // 因为split()方法的返回值是一个数组，所以我们要使用for循环来对这个数据进行遍历一下，遍历的过程中，需要将遍历出来的数据添加到对象里面去
+  // //   ["name=zhangsan", "age=6", "sex=nv", "height=168", "width=80"]
+  // for (var i = 0; i < str.length; i++) {
+  //   // 现在我们要将每一项都去掉等号= ,split()这个方法返回的是一个数组
+  //   var xiang = str[i].split('=');
+  // 我们在这里可以查看一下，将等号=去除之后是一个什么样的数据，遍历出来的是一个一个的数组
+  /* 
+       ["name", "zhangsan"]
+       ["age", "6"]
+       ["sex", "nv"]
+       ["height", "168"]
+       ["width", "80"]
+   */
+  // console.log(xiang);
+  // 现在我们要将数组中的数据添加到刚才声明好的对象中
+  // 这句代码的意思是：数组中的第一个元素做对象的键名，数组中的第二个元素是做对象的值，这样obj这个对象中的内容就是我们需要的键值对的形式了
+  //   obj[xiang[0]] = xiang[1];
+  // }
+  // console.log(obj);
+</script>
+<!-- 获取搜索框中的get方式传过来的请求参数 
+  ?name=zhangsan&age=6&sex=nv&height=168&width=80
+-->
+<script>
   var str = window.location.search;
-  //   从下标是1的内容，一直截取到最后，返回的是一个全新的字符串
+  // ?name=zhangsan&age=6&sex=nv&height=168&width=80
+  // 我们要将前面的内个问号去除掉，我们使用截取字符串的方法来做，slice()方法的含义是从第几位开始截取，如果括号中只写了一个参数，就是从当前位置一直截取到最后
+  // name=zhangsan&age=6&sex=nv&height=168&width=80
   str = str.slice(1);
-  //   将&符号删掉 split()方法返回值是一个数组
+  // 我们要将每个参数之间的&符号去掉
+  // ["name=zhangsan", "age=6", "sex=nv", "height=168", "width=80"]
+  // split()的返回值是一个数组
   str = str.split('&');
-  //  因为我们最后得到的是一个对象类型的，所以我们要先定义一个空对象
+  // 因为我们想要获得{键：值}这种对象形式的，所以我们要定义一个空对象
   var obj = {};
-  // 因为split()方法的返回值是一个数组，所以我们要使用for循环来对这个数据进行遍历一下，遍历的过程中，需要将遍历出来的数据添加到对象里面去
-  //   ["name=zhangsan", "age=6", "sex=nv", "height=168", "width=80"]
+  // 因为返回值是一个数组，所以我们可以使用for循环来对这个数组进行遍历，
   for (var i = 0; i < str.length; i++) {
-    // 现在我们要将每一项都去掉等号= ,split()这个方法返回的是一个数组
-    var xiang = str[i].split('=');
-    // 我们在这里可以查看一下，将等号=去除之后是一个什么样的数据，遍历出来的是一个一个的数组
-    /* 
-         ["name", "zhangsan"]
-         ["age", "6"]
-         ["sex", "nv"]
-         ["height", "168"]
-         ["width", "80"]
-     */
-    // console.log(xiang);
-    // 现在我们要将数组中的数据添加到刚才声明好的对象中
-    // 这句代码的意思是：数组中的第一个元素做对象的键名，数组中的第二个元素是做对象的值，这样obj这个对象中的内容就是我们需要的键值对的形式了
-    obj[xiang[0]] = xiang[1];
+    // 我们要将每一项中的等号去掉，所以还要使用split()这个方法，返回值也是一个数组
+    var arr = str[i].split('=');
+    // 查看一下打印的出来的是一个什么鬼
+    // ["name", "zhangsan"]
+    // ["age", "6"]
+    console.log(arr);
+    // 现在我们要往刚才声明的内个空对象中开始键和值，经我们观察，遍历出来的数组中的第一个元素是我们需要的键名，第二个元素是我们需要的键值，所以我们可以往空对象中放值
+    obj[arr[0]] = arr[1];
   }
+  // console.log(str);
   console.log(obj);
 </script>
 
