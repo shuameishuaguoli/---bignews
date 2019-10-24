@@ -462,3 +462,36 @@ body {
   /* 水平居中 */
   justify-content: center;
 }
+
+
+/* 给时间插件添加样式 */
+
+.data {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  margin-top: 10px;
+}
+
+.theme01 {
+  border: 1px solid #ccc;
+  height: 100%;
+  cursor: pointer;
+}
+
+#theme01 {
+  height: 100%;
+  border: none;
+}
+
+.img_div {
+  border: 1px solid #ccc;
+  border-left: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 5px;
+  display: flex;
+  cursor: pointer;
+}

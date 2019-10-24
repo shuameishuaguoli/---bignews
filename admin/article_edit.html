@@ -14,6 +14,11 @@
   <script src="./libs/jquery-1.12.4.min.js"></script>
   <!-- 模板引擎 -->
   <script src="./libs/template-web.js"></script>
+  <!-- 引入jedata的js文件 -->
+  <script src="./libs/jedate/js/jedate.js"></script>
+  <!-- 引入jedata的css文件 -->
+  <link rel="stylesheet" href="./libs/jedate/css/jedate.css">
+  <link rel="stylesheet" href="./libs/jedate/css/jeDate-test.css">
 </head>
 
 <body>
@@ -51,6 +56,16 @@
         <div class="form-group">
           <label class="col-sm-2 control-label">发布时间：</label>
           <div class="col-sm-4">
+            <!-- 时间插件start -->
+            <div class="data">
+              <div class="theme01">
+                <input id="theme01" type="text" placeholder="请选择" readonly>
+              </div>
+              <div class="img_div">
+                <img src="./libs/jedate/img/jedate.png" alt="">
+              </div>
+            </div>
+            <!-- 时间插件end -->
           </div>
         </div>
         <div class="form-group">
@@ -142,7 +157,15 @@
         $('.fenlei').html(str);
       }
     });
-    // 
+    // 事件插件的逻辑代码
+    jeDate("#theme01", {
+      theme: {
+        bgcolor: "#00A1CB",
+        color: "#ffffff",
+        pnColor: "#00CCFF"
+      },
+      format: "YYYY-MM-DD"
+    });
   })
 </script>
 

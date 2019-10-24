@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>时间插件的使用</title>
+  <!-- 引入jedata的js文件 -->
+  <script src="./admin/libs/jedate/js/jedate.js"></script>
+  <!-- 引入jedata的css文件 -->
+  <link rel="stylesheet" href="./admin/libs/jedate/css/jedate.css">
+  <link rel="stylesheet" href="./admin/libs/jedate/css/jeDate-test.css">
+  <style>
+    .data {
+      display: flex;
+      align-items: center;
+      height: 30px;
+      margin-top: 10px;
+    }
+    
+    .theme01 {
+      border: 1px solid #ccc;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    #theme01 {
+      height: 100%;
+      border: none;
+    }
+    
+    .img_div {
+      border: 1px solid #ccc;
+      border-left: none;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 5px;
+      display: flex;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+
+<body>
+  <div class="data">
+    <div class="theme01">
+      <input id="theme01" type="text" placeholder="请选择" readonly>
+    </div>
+    <div class="img_div">
+      <img src="./admin/libs/jedate/img/jedate.png" alt="">
+    </div>
+  </div>
+
+</body>
+
+<script>
+  jeDate("#theme01", {
+    theme: {
+      bgcolor: "#00A1CB",
+      color: "#ffffff",
+      pnColor: "#00CCFF"
+    },
+    format: "YYYY-MM-DD"
+  });
+</script>
+
+</html>
