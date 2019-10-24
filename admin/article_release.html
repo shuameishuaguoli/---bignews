@@ -61,7 +61,7 @@
             <!-- 时间插件start -->
             <div class="data">
               <div class="theme01">
-                <input id="theme01" type="text" placeholder="请选择" readonly>
+                <input id="theme01" type="text" placeholder="请选择" readonly name="date">
               </div>
               <div class="img_div">
                 <img src="./libs/jedate/img/jedate.png" alt="">
@@ -140,6 +140,30 @@
     var editor = new E('#editor')
       // 或者 var editor = new E( document.getElementById('editor') )
     editor.create()
+
+    // 需求：点击发布按钮，需要将填写的内容发布上去
+    // 分析：要给发布按钮注册点击事件，点击发布按钮需要获取到form表单中的信息
+    $('.btn-release').click(function(e) {
+      // 因为发布按钮是button按钮，所以我们需要将按钮的默认刷新行为禁止掉
+      e.preventDefault();
+      // 使用form表单将input框中的所有信息都要获取到
+      var form = new FormData($('form')[0]);
+      //   使用ajax技术将需要发表的内容进行发表
+      $.ajax({
+        // 设置请求地址
+        url: BigNew.article_publish,
+        // 设置请求方式
+        type: 'post',
+        // 不进行数据处理
+        contentType: false,
+        // 不进行
+        processData: false,
+        // 响应返回的数据
+        success: function(result) {
+          console.log(result);
+        }
+      });
+    });
   })
 </script>
 

@@ -11,12 +11,20 @@
   <div id="editor">
     <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
   </div>
+  <button id="btn2">获取text</button>
 
   <script type="text/javascript">
     var E = window.wangEditor
     var editor = new E('#editor')
       // 或者 var editor = new E( document.getElementById('editor') )
     editor.create()
+      // 获取按钮
+    var btn = document.querySelector('#btn2');
+    // 给按钮注册点击事件
+    btn.addEventListener('click', function() {
+      // 当点击按钮的时候需要获取到富文本框中的内容
+      console.log(editor.txt.text());
+    });
   </script>
 </body>
 

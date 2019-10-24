@@ -480,8 +480,10 @@ body {
 }
 
 #theme01 {
+  box-sizing: border-box;
   height: 100%;
   border: none;
+  padding-left: 10px;
 }
 
 .img_div {

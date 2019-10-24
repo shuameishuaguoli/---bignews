@@ -11,7 +11,11 @@
   <!-- 引入jedata的css文件 -->
   <link rel="stylesheet" href="./admin/libs/jedate/css/jedate.css">
   <link rel="stylesheet" href="./admin/libs/jedate/css/jeDate-test.css">
-  <style>
+  <!-- <style>
+    * {
+      box-sizing: border-box;
+    }
+    
     .data {
       display: flex;
       align-items: center;
@@ -28,6 +32,7 @@
     #theme01 {
       height: 100%;
       border: none;
+      padding-left: 10px;
     }
     
     .img_div {
@@ -41,31 +46,47 @@
       display: flex;
       cursor: pointer;
     }
-  </style>
+  </style> -->
 </head>
 
 
 <body>
-  <div class="data">
-    <div class="theme01">
-      <input id="theme01" type="text" placeholder="请选择" readonly>
+  <!-- <form action="">
+    <div class="data">
+      <div class="theme01"> -->
+  <input id="goweeks" type="text" name="data" placeholder="请选择" readonly>
+  <!-- </div>
+      <div class="img_div">
+        <img src="./admin/libs/jedate/img/jedate.png" alt="">
+      </div>
     </div>
-    <div class="img_div">
-      <img src="./admin/libs/jedate/img/jedate.png" alt="">
-    </div>
-  </div>
+  </form> -->
 
 </body>
 
 <script>
-  jeDate("#theme01", {
-    theme: {
-      bgcolor: "#00A1CB",
-      color: "#ffffff",
-      pnColor: "#00CCFF"
-    },
-    format: "YYYY-MM-DD"
+  // jeDate("#goweeks", {
+  //   theme: {
+  //     bgcolor: "#00A1CB",
+  //     color: "#ffffff",
+  //     pnColor: "#00CCFF"
+  //   },
+  //   format: "YYYY-MM-DD"
+  // });
+  // 获取年月日
+  jeDate('#goweeks', {
+    festival: true,
+    format: 'YYYY-MM-DD',
+    donefun: function(obj) {
+      //console.log(jeDate.getLunar(obj.date[0]));
+      console.log(jeDate.getLunar(obj.date[0]).yM);
+    }
   });
+  // var form = document.querySelector('form');
+  // form.onchange = function() {
+  //   var fd = new FormData(form);
+  //   console.log(fd);
+  // }
 </script>
 
 </html>
