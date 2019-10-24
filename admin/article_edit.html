@@ -2,71 +2,148 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>文章列表</title>
-    <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/iconfont.css">
-    <link rel="stylesheet" href="css/main.css">
-    <!-- jq -->
-    <script src="./libs/jquery-1.12.4.min.js"></script>
-    <!-- 模板引擎 -->
-    <script src="./libs/template-web.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>文章列表</title>
+  <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/iconfont.css">
+  <link rel="stylesheet" href="css/main.css">
+  <!-- jq -->
+  <script src="./libs/jquery-1.12.4.min.js"></script>
+  <!-- 模板引擎 -->
+  <script src="./libs/template-web.js"></script>
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="common_title">
-            文章编辑
+  <div class="container-fluid">
+    <div class="common_title">
+      文章编辑
+    </div>
+    <div class="container-fluid common_con">
+      <form class="form-horizontal article_form" id="form">
+        <div class="form-group">
+          <label for="inputTitle" class="col-sm-2 control-label">文章标题：</label>
+          <div class="col-sm-10">
+            <input type="text" name="title" class="form-control title" id="inputTitle" value="">
+          </div>
         </div>
-        <div class="container-fluid common_con">
-            <form class="form-horizontal article_form" id="form">
-                <div class="form-group">
-                    <label for="inputTitle" class="col-sm-2 control-label">文章标题：</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="title" class="form-control title" id="inputTitle" value="文章标题文字">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputCover" class="col-sm-2 control-label">文章封面：</label>
-                    <div class="col-sm-10">
-                        <img src="images/pic06.jpg" class="article_cover">
-                        <input name="cover" type="file" id="inputCover">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputCategory" class="col-sm-2 control-label">文章类别：</label>
-                    <div class="col-sm-4">
-                        <select class="form-control category" name="categoryId">
-                            <option>类别一</option>
+        <div class="form-group">
+          <label for="inputCover" class="col-sm-2 control-label">文章封面：</label>
+          <div class="col-sm-10">
+            <img src="images/pic06.jpg" class="article_cover">
+            <input name="cover" type="file" id="inputCover">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputCategory" class="col-sm-2 control-label">文章类别：</label>
+          <div class="col-sm-4">
+            <select class="form-control category fenlei" name="categoryId">
+                            <!-- <option>类别一</option>
                             <option>类别二</option>
                             <option>类别三</option>
                             <option selected>类别四</option>
-                            <option>类别五</option>
+                            <option>类别五</option> -->
                         </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">发布时间：</label>
-                    <div class="col-sm-4">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
-                    <div class="col-sm-10">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success btn-edit">修改</button>
-                        <button type="submit" class="btn btn-default btn-draft">存为草稿</button>
-                    </div>
-                </div>
-            </form>
+          </div>
         </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">发布时间：</label>
+          <div class="col-sm-4">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
+          <div class="col-sm-10">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-success btn-edit">修改</button>
+            <button type="submit" class="btn btn-default btn-draft">存为草稿</button>
+          </div>
+        </div>
+      </form>
     </div>
+  </div>
 </body>
+<!-- 定义模板 -->
+<script type="text/html" id="text">
+  {{each data}}
+  <option value='{{$value.id}}'>{{$value.name}}</option>
+  {{/each }}
+</script>
+
+<script>
+  $(function() {
+    // 需求：加载页面的时候需要获取到当前点击的标题和类别，但是是需要截取一下点击编辑后带过来的id值window.location.search这个方法是获取到跳转地址中的请求参数，不过这个请求参数中还有？符号，我们还要吧这个问号给去掉，我们值需要这种形式{id:220}对象类型的
+    var str = window.location.search;
+    // 先把问号?去掉，slice()方法是截取字符串的方法，里面如果只传一个参数的话，那么就是从当前下边一直截取到最后，如果是两个参数的话，那么截取范围就是半闭半开区间，包左不包右的取值范围，例如[4,9)截取范围就是从第四个下标开始截取，一直截取到下标为8的元素
+    str = str.slice(1); //id=220
+    // 我们还需要将=符号去掉，使用split()的方法是使用指定的符号截取元素，返回值是一个数组类型["id", "220"]
+    str = str.split('=');
+    // 因为我们需要对象类型的数据，所以先定义一个空对象
+    var myid = {};
+    // 因为split()方法的返回值是一个数据，所以我们使用for循环来对这个数组进行遍历，遍历的过程将遍历出来的对象存放到声明的空对象中
+    for (var i = 0; i < str.length; i++) {
+      myid[str[0]] = str[1];
+    }
+    // 现在就将传递过来请求参数截取到了{id:'200'}
+    // 打印一下看一下有没有获取到我们想要的格式
+    // console.log(myid);将string类型的参数转成number类型
+    var id = parseInt(myid.id);
+    console.log(id);
+    // 现在我们使用ajax技术，将接口所需要的id值进行传递，并接受服务器响应回来的数据
+    $.ajax({
+      // 设置请求接口地址
+      url: BigNew.article_search,
+      // 设置请求方式
+      type: 'get',
+      //   设置请求参数
+      data: {
+        id: id,
+      },
+      // 响应服务器数据
+      success: function(result) {
+        console.log(result);
+        // 文章标题添加内容
+        $('#inputTitle').val(result.data.title);
+        // 给img图片添加当前获取到的图片
+        $('.article_cover').attr('src', result.data.cover);
+      }
+    });
+    // 需求：点击文件上传控件儿的时候需要给图片一个临时的url地址
+    // 分析：给文件上传控件添加内容改变事件，当内容改变的时候需要给图片分配一个临时的url地址
+    $('#inputCover').change(function() {
+      // console.log($(this));
+      // 获取一下上传后的图片文件
+      var file = this.files[0];
+      // console.log(file);
+      // 给这个图片一个临时url地址
+      var url = URL.createObjectURL(file);
+      console.log(url);
+      // 将这个临时的url地址给到img中的src
+      $('.article_cover').attr('src', url);
+    });
+
+    // 需求：当我们加载页面的时候需要文章类别下拉框中有内容
+    $.ajax({
+      // 设置url请求地址
+      url: BigNew.category_list,
+      // 设置请求方式
+      type: 'get',
+      // 响应服务器
+      success: function(result) {
+        // console.log(result);
+        // 我们使用模板引擎来将获取到的数据添加到select标签中
+        var str = template('text', result);
+        // console.log(str);
+        $('.fenlei').html(str);
+      }
+    });
+    // 
+  })
+</script>
 
 </html>
