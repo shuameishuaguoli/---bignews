@@ -82,7 +82,7 @@
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-success btn-edit">修改</button>
+            <button type="submit" class="btn btn-success btn-edit xiugai">修改</button>
             <button type="submit" class="btn btn-default btn-draft">存为草稿</button>
           </div>
         </div>
@@ -178,6 +178,16 @@
     var editor = new E('#editor')
       // 或者 var editor = new E( document.getElementById('editor') )
     editor.create()
+
+
+    // 需求：当我们点击修改按钮的时候需要获取到form表单中所有的数据，所以我们先给修改按钮注册点击事假
+    $('.xiugai').click(function(e) {
+      // 因为修改按钮是submit类型做的，所以要先给按钮禁止默认行为
+      e.preventDefault();
+      // 先声明一个form表单对象
+      var form = new FormData($('form')[0]);
+      console.log(form);
+    });
   })
 </script>
 

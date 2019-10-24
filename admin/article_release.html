@@ -2,71 +2,145 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>文章列表</title>
-    <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/iconfont.css">
-    <link rel="stylesheet" href="css/main.css">
-    <!-- jq -->
-    <script src="./libs/jquery-1.12.4.min.js"></script>
-    <!-- 模板引擎 -->
-    <script src="./libs/template-web.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>文章列表</title>
+  <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/iconfont.css">
+  <link rel="stylesheet" href="css/main.css">
+  <!-- jq -->
+  <script src="./libs/jquery-1.12.4.min.js"></script>
+  <!-- 模板引擎 -->
+  <script src="./libs/template-web.js"></script>
+  <!-- 引入jedata的js文件 -->
+  <script src="./libs/jedate/js/jedate.js"></script>
+  <!-- 引入jedata的css文件 -->
+  <link rel="stylesheet" href="./libs/jedate/css/jedate.css">
+  <link rel="stylesheet" href="./libs/jedate/css/jeDate-test.css">
+  <!-- 引入富文本编辑器的js文件 -->
+  <script src="./libs/wangEditor.js"></script>
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="common_title">
-            文章编辑
+  <div class="container-fluid">
+    <div class="common_title">
+      文章编辑
+    </div>
+    <div class="container-fluid common_con">
+      <form class="form-horizontal article_form" id="form">
+        <div class="form-group">
+          <label for="inputTitle" class="col-sm-2 control-label">文章标题：</label>
+          <div class="col-sm-10">
+            <input type="text" name="title" class="form-control title" id="inputTitle" placeholder="文章标题文字">
+          </div>
         </div>
-        <div class="container-fluid common_con">
-            <form class="form-horizontal article_form" id="form">
-                <div class="form-group">
-                    <label for="inputTitle" class="col-sm-2 control-label">文章标题：</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="title" class="form-control title" id="inputTitle" value="文章标题文字">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputCover" class="col-sm-2 control-label">文章封面：</label>
-                    <div class="col-sm-10">
-                        <img src="images/pic06.jpg" class="article_cover">
-                        <input name="cover" type="file" id="inputCover">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputCategory" class="col-sm-2 control-label">文章类别：</label>
-                    <div class="col-sm-4">
-                        <select class="form-control category" name="categoryId">
-                            <option>类别一</option>
+        <div class="form-group">
+          <label for="inputCover" class="col-sm-2 control-label">文章封面：</label>
+          <div class="col-sm-10">
+            <img src="images/pic06.jpg" class="article_cover">
+            <input name="cover" type="file" id="inputCover">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputCategory" class="col-sm-2 control-label">文章类别：</label>
+          <div class="col-sm-4">
+            <select class="form-control category leibie" name="categoryId">
+                            <!-- <option>类别一</option>
                             <option>类别二</option>
                             <option>类别三</option>
                             <option selected>类别四</option>
-                            <option>类别五</option>
+                            <option>类别五</option> -->
                         </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">发布时间：</label>
-                    <div class="col-sm-4">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
-                    <div class="col-sm-10">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success btn-release">发布</button>
-                        <button type="submit" class="btn btn-default btn-draft">存为草稿</button>
-                    </div>
-                </div>
-            </form>
+          </div>
         </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">发布时间：</label>
+          <div class="col-sm-4">
+            <!-- 时间插件start -->
+            <div class="data">
+              <div class="theme01">
+                <input id="theme01" type="text" placeholder="请选择" readonly>
+              </div>
+              <div class="img_div">
+                <img src="./libs/jedate/img/jedate.png" alt="">
+              </div>
+            </div>
+            <!-- 时间插件end -->
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
+          <div class="col-sm-10">
+            <!-- 富文本编辑器start -->
+            <div id="editor">
+              <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
+            </div>
+            <!-- 富文本编辑器end -->
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-success btn-release">发布</button>
+            <button type="submit" class="btn btn-default btn-draft">存为草稿</button>
+          </div>
+        </div>
+      </form>
     </div>
+  </div>
 </body>
+<script type="text/html" id="text">
+  {{each data}}
+  <option value="{{$value.id}}">{{$value.name}}</option>
+  {{/each}}
+</script>
+<script>
+  $(function() {
+    // 需求：当加载页面的时候需要获取到文章类别中的下拉项
+    // 分析：同样适用ajax技术想后台获取数据
+    $.ajax({
+      // 设置请求参数
+      url: BigNew.category_list,
+      // 设置请求方式
+      type: 'get',
+      // 响应请求服务器的请求参数
+      success: function(result) {
+        //   打印一下，看看返回的数据是什么样子的
+        console.log(result);
+        // 适用模板引擎将获取到的数据添加到下拉列表中
+        var str = template('text', result);
+        $('.leibie').html(str);
+      }
+    });
+
+    // 需求：点击文件上传控件的时候需要预览图片的功能
+    // 分析：给上传的文件设置一个临时的url地址，我们要将这个临时的url地址给到img标签中的src这个属性，首先我们要给文件上传控件注册一个内容改变事件
+    $('#inputCover').change(function() {
+      var file = this.files[0];
+      //   console.log(file);
+      // 我们给获取到的文件设置一个临时的url地址
+      var url = URL.createObjectURL(file);
+      //   console.log(url);
+      // 我们将生成的这个临时url地址给到img标签的src这个固定属性上
+      $('.article_cover').attr('src', url);
+    });
+
+    // 事件插件的逻辑代码
+    jeDate("#theme01", {
+      theme: {
+        bgcolor: "#00A1CB",
+        color: "#ffffff",
+        pnColor: "#00CCFF"
+      },
+      format: "YYYY-MM-DD"
+    });
+    // 富文本编辑器的逻辑代码
+    var E = window.wangEditor
+    var editor = new E('#editor')
+      // 或者 var editor = new E( document.getElementById('editor') )
+    editor.create()
+  })
+</script>
 
 </html>
