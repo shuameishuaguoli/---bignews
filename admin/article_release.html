@@ -133,7 +133,9 @@
         color: "#ffffff",
         pnColor: "#00CCFF"
       },
-      format: "YYYY-MM-DD"
+      format: "YYYY-MM-DD",
+      // 提高一下插件儿的层级
+      zIndex: 99999,
     });
     // 富文本编辑器的逻辑代码
     var E = window.wangEditor
@@ -148,10 +150,16 @@
       e.preventDefault();
       // 使用form表单将input框中的所有信息都要获取到
       var form = new FormData($('form')[0]);
+      // 因为富文本插件中的数据需要单独获取，所有要单独给form添加属性
+      form.append('content', editor.txt.text());
+      // 点击发布按钮就是，将文章状态设置成已发布
+      form.append('state', '已发布');
       //   使用ajax技术将需要发表的内容进行发表
       $.ajax({
         // 设置请求地址
         url: BigNew.article_publish,
+        // 设置请求数据
+        data: form,
         // 设置请求方式
         type: 'post',
         // 不进行数据处理
@@ -161,9 +169,45 @@
         // 响应返回的数据
         success: function(result) {
           console.log(result);
+          if (result.code != 200) {
+            alert('文章添加失败！');
+          } else {
+            alert('文章添加成功');
+          }
         }
       });
     });
+
+    // 需求：点击存为草稿按钮，就是将所写的文章添加为草稿
+    $('.btn-draft').click(function(e) {
+      // 因为草稿按钮是一个button类型的按钮，所以我们要将这个按钮的默认行为禁止掉
+      e.preventDefault();
+      // 点击按钮的时候需要将form表单中的内容获取到，要先实例化一个formdata对象
+      // var form_data = document.querySelector('form');
+      // formdata方法中传的实参一定要是一个DOM对象节点
+      var form = new FormData($('form')[0]);
+      // 这里有两个值是form表单中是获取不到的，第一个是富文本框中的内容是form表单获取不到的；第二个是文章的状态，是form获取不到的，所以我们要给form表单添加键名和值
+      form.append('content', editor.txt.text()); //获取的是富文本框中的内容
+      form.append('state', '草稿');
+      // 我们使用ajax即使将获取到的信息向服务器发送请求
+      $.ajax({
+        // 设置请求接口地址
+        url: BigNew.article_publish,
+        // 设置请求方式
+        type: 'post',
+        // 设置请求参数
+        data: form,
+        // 不对参数进行处理
+        contentType: false,
+        processData: false,
+        // 响应服务器返回的数据
+        success: function(result) {
+          console.log(result);
+        }
+      });
+
+    });
+
   })
 </script>
 

@@ -14,6 +14,8 @@
   <script src="./libs/jquery-1.12.4.min.js"></script>
   <!-- 引入模板引擎js文件 -->
   <script src="./libs/template-web.js"></script>
+  <!-- 引入bootstrapjs文件 -->
+  <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -257,7 +259,7 @@
         $('.edit-name').val(result.data[0].name);
         $('.edit-bieming').val(result.data[0].slug);
         $('.hidd').val(result.data[0].id);
-        // 要先将服务器响应回来的内容添加到模态框中，在显示模态框
+        // 要先将服务器响应回来的内容添加到模态框中，再显示模态框
         $('#editModal').modal('show');
       }
     });
