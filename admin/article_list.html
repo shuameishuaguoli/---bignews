@@ -86,7 +86,7 @@
     <td class="text-center">{{$value.state}}</td>
     <td class="text-center">
       <a href="article_edit.html?id={{$value.id}}" class="btn btn-default btn-xs">编辑</a>
-      <a href="javascript:void(0);" class="btn btn-danger btn-xs delete">删除</a>
+      <a href="javascript:void(0);" class="btn btn-danger btn-xs delete" data-id="{{$value.id}}">删除</a>
     </td>
   </tr>
   {{/each}}
@@ -102,7 +102,7 @@
       $.ajax({
         url: BigNew.category_list,
         success: function(result) {
-          console.log(result);
+          // console.log(result);
           var str = template('all_fenlei', result);
           //   打印一下，看看能不能将响应的内容获取到
           //   console.log(str);
@@ -110,80 +110,84 @@
         }
       });
 
+      // 将获取所有的文章内容的逻辑代码进行封装
+      function all_list() {
+        //   需求：加载页面的时候需要获取所有文章数据
+        $.ajax({
+          //   设置url接口地址
+          url: BigNew.article_query,
+          // 设置请求方式
+          type: 'get',
+          // 设置请求参数
+          data: {
+            // 设置perpage的意思是，一页展示10条数据
+            perpage: mypage,
+          },
+          // 响应服务器的数据
+          success: function(result) {
+            console.log(result);
+            //   调用template()方法，第一个参数是定义模板的id名，第二个参数是获取的数据
+            var str = template('all_wenzhang', result);
+            //   console.log(str);
+            //   将获取到的内容添加到tbody中
+            $('tbody').html(str);
+            // 服务器返回了数据之后我们才能知道了有多少页
+            // 创建分页的逻辑代码
+            $('#pagination-demo').twbsPagination({
+              // 总共的页数，返回的result结果中有totalPage这个值，要将这个值设置成总页数
+              totalPages: result.data.totalPage,
+              // 一行显示几页
+              visiblePages: 6,
+              first: '首页',
+              prev: '上一页',
+              next: '下一页',
+              last: '尾页',
+              // 点击页码之后触发的事件
+              onPageClick: function(event, page) {
+                // 打印一下当前的页码
+                // console.log(page);
+                // 点击到当前页码的时候，需要再次获取一下所有分类和所有状态
+                // 获取所有分类select的标签中的value值，这里要注意，获取select中的value值的时候也是使用val()这个方法，如果option中没有设置value值的话，那么val()获取到的就是标签外的内容
+                var type = $('#selCategory').val();
+                var state = $('.state').val();
+                // 当点击到当前页码的时候我们需要获取当前页码的上的文章信息，因为涉及到了获取数据，所以我们还要使用ajax技术从数据库获取数据
+                $.ajax({
+                  // 设置请求参数
+                  url: BigNew.article_query,
+                  // 设置请求方式
+                  type: 'get',
+                  // 设置请求参数，第一个page是接口中的数据，第二个page是我们当前点击的页码;    perpage是每页显示多少条数据
+                  data: {
+                    // 当前页码
+                    page: page,
+                    // 当前页的页容量
+                    perpage: mypage,
+                    // 筛选的条件并没有获取到，但是标签是一直在页面上显示的，我们在获取一下筛选条件即可
+                    type: type,
+                    state: state,
+                  },
+                  // 接收服务器响应的数据
+                  success: function(result) {
+                    // console.log(result);
+                    // 将获取到的数据渲染到页面上，我们使用模板引擎来渲染
+                    var str = template('all_wenzhang', result);
+                    //   将获取到的内容添加到tbody中
+                    $('tbody').html(str);
+                  }
+                });
+              }
+            });
+            // 重置总页数
+            // $('.change').click(function() {
+            //   $('#pagination-demo').twbsPagination('changeTotalPages', 100, 25);
+            // });
+          }
+        });
+      }
+      // 先调用一下获取所有文章的方法
+      all_list();
 
-      //   需求：加载页面的时候需要获取所有文章数据
-      $.ajax({
-        //   设置url接口地址
-        url: BigNew.article_query,
-        // 设置请求方式
-        type: 'get',
-        // 设置请求参数
-        data: {
-          // 设置perpage的意思是，一页展示10条数据
-          perpage: mypage,
-        },
-        // 响应服务器的数据
-        success: function(result) {
-          console.log(result);
-          //   调用template()方法，第一个参数是定义模板的id名，第二个参数是获取的数据
-          var str = template('all_wenzhang', result);
-          //   console.log(str);
-          //   将获取到的内容添加到tbody中
-          $('tbody').html(str);
-          // 服务器返回了数据之后我们才能知道了有多少页
-          // 创建分页的逻辑代码
-          $('#pagination-demo').twbsPagination({
-            // 总共的页数，返回的result结果中有totalPage这个值，要将这个值设置成总页数
-            totalPages: result.data.totalPage,
-            // 一行显示几页
-            visiblePages: 6,
-            first: '首页',
-            prev: '上一页',
-            next: '下一页',
-            last: '尾页',
-            // 点击页码之后触发的事件
-            onPageClick: function(event, page) {
-              // 打印一下当前的页码
-              console.log(page);
-              // 点击到当前页码的时候，需要再次获取一下所有分类和所有状态
-              // 获取所有分类select的标签中的value值，这里要注意，获取select中的value值的时候也是使用val()这个方法，如果option中没有设置value值的话，那么val()获取到的就是标签外的内容
-              var type = $('#selCategory').val();
-              var state = $('.state').val();
-              // 当点击到当前页码的时候我们需要获取当前页码的上的文章信息，因为涉及到了获取数据，所以我们还要使用ajax技术从数据库获取数据
-              $.ajax({
-                // 设置请求参数
-                url: BigNew.article_query,
-                // 设置请求方式
-                type: 'get',
-                // 设置请求参数，第一个page是接口中的数据，第二个page是我们当前点击的页码;    perpage是每页显示多少条数据
-                data: {
-                  // 当前页码
-                  page: page,
-                  // 当前页的页容量
-                  perpage: mypage,
-                  // 筛选的条件并没有获取到，但是标签是一直在页面上显示的，我们在获取一下筛选条件即可
-                  type: type,
-                  state: state,
-                },
-                // 接收服务器响应的数据
-                success: function(result) {
-                  console.log(result);
-                  // 将获取到的数据渲染到页面上，我们使用模板引擎来渲染
-                  var str = template('all_wenzhang', result);
-                  //   将获取到的内容添加到tbody中
-                  $('tbody').html(str);
-                }
-              });
-            }
-          });
 
-
-          // 重置总页数
-          // $('.change').click(function() {
-          //   $('#pagination-demo').twbsPagination('changeTotalPages', 100, 25);
-          // });
-        }
-      });
 
       //   需求：当我们点击筛选按钮的时候需要根据分类和状态来显示所对应的文章
       $('.screen').click(function(e) {
@@ -216,6 +220,44 @@
             $('#pagination-demo').twbsPagination('changeTotalPages', result.data.totalPage, 1);
           }
         });
+      });
+      // 点击删除按钮删除文章
+      // 分析：我们要给tbody进行注册点击事件，因为所有文章都是在加载文章的时候想服务器发送请求加载进来的，所有我们要使用事件委托来对删除按钮进行删除操作
+      $('tbody').on('click', '.delete', function() {
+
+        var firm = confirm('确定删除文章么？');
+        if (!firm) {
+          return;
+        } else {
+          // alert('我被点击了');
+          // 获取当前点击删除按钮上的自定义属性data-id值
+          var id = $(this).attr('data-id');
+          console.log(id);
+          // 使用ajax将想服务器发送请求，并响应数据
+          $.ajax({
+            // 设置请求方式
+            type: 'post',
+            // 设置url请求地址
+            url: BigNew.article_delete,
+            // 设置请求参数
+            data: {
+              id: id,
+            },
+            // 响应服务器的请求参数
+            success: function(result) {
+              if (result.code == 204) {
+                // 为了用户的友好体验，删除成功之后给用户一个友好的提示
+                alert('文章删除成功！');
+                // 文章删除之后，在调用一下获取所有文章内容的方法
+                all_list();
+                console.log(result);
+              } else {
+                alert('文章删除失败~~');
+              }
+            }
+          });
+        }
+
       });
     })
     //

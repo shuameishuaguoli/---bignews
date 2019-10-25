@@ -61,7 +61,7 @@
             <!-- 时间插件start -->
             <div class="data">
               <div class="theme01">
-                <input id="theme01" type="text" placeholder="请选择" readonly>
+                <input id="theme01" name="date" type="text" placeholder="请选择" readonly>
               </div>
               <div class="img_div">
                 <img src="./libs/jedate/img/jedate.png" alt="">
@@ -115,6 +115,7 @@
     // 打印一下看一下有没有获取到我们想要的格式
     // console.log(myid);将string类型的参数转成number类型
     var id = parseInt(myid.id);
+
     console.log(id);
     // 现在我们使用ajax技术，将接口所需要的id值进行传递，并接受服务器响应回来的数据
     $.ajax({
@@ -133,6 +134,16 @@
         $('#inputTitle').val(result.data.title);
         // 给img图片添加当前获取到的图片
         $('.article_cover').attr('src', result.data.cover);
+        // 给下拉列表设置当前文章所属类别，这里要注意，给下拉列表设置值的时候，其实就是是设置select下的option中value值
+        $('select').val(result.data.categoryId);
+        // 给时间插件添加时间
+        $('#theme01').attr('placeholder', result.data.date);
+        // 给富文本编辑器设置内容start
+        var E = window.wangEditor
+        var editor = new E('#editor')
+        editor.create()
+        editor.txt.html(result.data.content);
+        // 给富文本编辑器设置内容end
       }
     });
     // 需求：点击文件上传控件儿的时候需要给图片一个临时的url地址
@@ -171,22 +182,56 @@
         color: "#ffffff",
         pnColor: "#00CCFF"
       },
-      format: "YYYY-MM-DD"
+      format: "YYYY-MM-DD",
+      zIndex: 99999,
     });
     // 富文本编辑器的逻辑代码
     var E = window.wangEditor
     var editor = new E('#editor')
       // 或者 var editor = new E( document.getElementById('editor') )
-    editor.create()
+    editor.create();
 
 
     // 需求：当我们点击修改按钮的时候需要获取到form表单中所有的数据，所以我们先给修改按钮注册点击事假
     $('.xiugai').click(function(e) {
       // 因为修改按钮是submit类型做的，所以要先给按钮禁止默认行为
       e.preventDefault();
-      // 先声明一个form表单对象
+      // 先声明一个form表单对象，这里要注意，formdata中传的实必须是DOM对象
       var form = new FormData($('form')[0]);
-      console.log(form);
+      // 因为form数据中没有富文本文本框中的数据，所以我们要将富文本框中内容添加到form表单中
+      form.append('content', editor.txt.text());
+      // 文章id也要设置上，好让服务器知道更换哪个文章，根据id来找文章
+      form.append('id', id);
+      // 文章状态这个字段form中也没有给定，所以我们还要给form添加一个文章状态
+      form.append('state', '已发布');
+      console.log(form.get('state'));
+      // console.log(form);
+      // 点击发布之后，需要弹出一个询问框，要确定一下用户是否真的需要更改文章内容
+      var firm = confirm('确定要修改文章吗？');
+      if (!firm) {
+        return;
+      } else {
+        $.ajax({
+          // 设置url请求地址
+          url: BigNew.article_edit,
+          // 设置请求方式
+          type: 'post',
+          // 设置请求参数
+          data: form,
+          // 不对请求参数进行处理
+          contentType: false,
+          processData: false,
+          // 响应服务器的数据
+          success: function(result) {
+            if (result.code != 200) {
+              alert('文章修改失败~~');
+            } else {
+              alert('文章修改成功~~');
+              window.location.href = './article_list.html';
+            }
+          }
+        });
+      }
     });
   })
 </script>

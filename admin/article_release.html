@@ -61,7 +61,7 @@
             <!-- 时间插件start -->
             <div class="data">
               <div class="theme01">
-                <input id="theme01" type="text" placeholder="请选择" readonly name="date">
+                <input id="theme01" name="date" type="text" placeholder="请选择" readonly>
               </div>
               <div class="img_div">
                 <img src="./libs/jedate/img/jedate.png" alt="">
@@ -173,6 +173,7 @@
             alert('文章添加失败！');
           } else {
             alert('文章添加成功');
+            window.location.href = './article_list.html';
           }
         }
       });
@@ -203,6 +204,12 @@
         // 响应服务器返回的数据
         success: function(result) {
           console.log(result);
+          if (result.code == 200) {
+            alert('文章新增成功~~');
+            window.location.href = './article_list.html';
+          } else {
+            alert('文章新增失败~~');
+          }
         }
       });
 
