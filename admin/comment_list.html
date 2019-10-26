@@ -14,6 +14,12 @@
   <script src="./libs/jquery-1.12.4.min.js"></script>
   <!-- 加载模板引擎的js文件 -->
   <script src="./libs/template-web.js"></script>
+  <!-- 加载bootstrap的js文件 -->
+  <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
+  <!-- 加载bootstrap的css文件 -->
+  <script src="./libs/bootstrap/css/bootstrap.min.css"></script>
+  <!-- 加载分页的js文件 -->
+  <script src="./libs/jquery.twbsPagination.js"></script>
 </head>
 
 <body>
@@ -40,6 +46,7 @@
       <div class="row text-center">
         <ul class="pagination pagination-sm">
           <!-- 分页放的位置 -->
+          <ul id="pagination-demo" class="pagination-sm"></ul>
         </ul>
         <ul id="pagination" class="pagination-sm"></ul>
       </div>
@@ -67,6 +74,8 @@
 <script>
   // jquery的入口函数
   $(function() {
+    // 设置一下一页上的评论数量
+    var perpage = 7;
     // 将获取所有的评论数据封装成一个函数
     function get_Pinglun() {
       // 需求：当页面进行加载的时候就要想服务器发送请求，需要向服务器获取参数       BigNew.comment_list
@@ -77,6 +86,9 @@
         // 设置请求方式
         type: 'get',
         // 这里其实是有个请求参数的，当page perpage这两个参数不写的话，那么就是采用默认值，page的默认值是显示的是当前页，perpage的默认值是每页显示的评论的条数，默认是每页显示6条
+        data: {
+          perpage: perpage,
+        },
         // 响应服务器返回的数据
         success: function(result) {
           console.log(result);
@@ -85,6 +97,47 @@
           var str = template('text', result);
           // 最后将已经整合好的数据str放到tbody这个标签中
           $('tbody').html(str);
+
+          // 分页功能需要添加到服务器请求成功之后的success中的回调函数中
+          // 分页功能的逻辑代码start
+          // 需求：要给页面添加一个分页的功能
+          $('#pagination-demo').twbsPagination({
+            //   总页数就是
+            totalPages: result.data.totalPage,
+            // 一排显示几个页码
+            visiblePages: 6,
+            // 重新设置一下按钮
+            first: '首页',
+            prev: '上一页',
+            next: '下一页',
+            last: '尾页',
+            onPageClick: function(event, page) {
+              // 这一行我们是暂时用不到的，我们可以先将这一行注释掉
+              //   $('#page-content').text('Page ' + page);
+              // 这个page是点击谁就获取当前的页码数
+              console.log(page);
+              // 当我点击每个页码时候需要将当前的这个页码使用ajax技术将这个当前页的评论数据进行获取到并且渲染到页面上
+              $.ajax({
+                // 设置一下url接口地址
+                url: BigNew.comment_list,
+                // 设置一下请求方式
+                type: 'get',
+                // 设置一下请求参数
+                data: {
+                  // perpage表示的是一页显示多少条评论
+                  perpage: perpage,
+                  // page表示显示第几页的数据
+                  page: page,
+                },
+                success: function(result) {
+                  var str = template('text', result);
+                  //往tbody中添加str数据
+                  $('tbody').html(str);
+                }
+              });
+            }
+          });
+          // 分页功能的逻辑代码end
         }
       });
     }
@@ -136,7 +189,6 @@
       }
     })
 
-    // 需求：要给页面添加一个分页的功能
 
 
     // 
