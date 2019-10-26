@@ -10,7 +10,9 @@
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/iconfont.css">
   <link rel="stylesheet" href="css/main.css">
+  <!-- 加载jQuery的js文件 -->
   <script src="./libs/jquery-1.12.4.min.js"></script>
+  <!-- 加载模板引擎的js文件 -->
   <script src="./libs/template-web.js"></script>
 </head>
 
@@ -32,128 +34,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>小周</td>
-            <td>这是一条测试评论，欢迎光临</td>
-            <td>《世界，你好》</td>
-            <td>2017-07-04 12:00:00</td>
-            <td>已批准</td>
-            <td class="text-center">
-              <a href="javascript:void(0);;" class="btn btn-warning btn-xs">拒绝</a>
-              <a href="javascript:void(0);;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr class="danger">
-            <td>小右</td>
-            <td>你好啊，交个朋友好吗？</td>
-            <td>《世界，你好》</td>
-            <td>2017-07-06 14:10:00</td>
-            <td>待审核</td>
-            <td class="text-center">
-              <a href="javascript:void(0);;" class="btn btn-info btn-xs">批准</a>
-              <a href="javascript:void(0);;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr class="danger">
-            <td>老周</td>
-            <td>不好</td>
-            <td>《世界，你好》</td>
-            <td>2017-07-09 22:22:00</td>
-            <td>待审核</td>
-            <td class="text-center">
-              <a href="javascript:void(0);;" class="btn btn-info btn-xs">批准</a>
-              <a href="javascript:void(0);;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr class="danger">
-            <td>中周</td>
-            <td>How are you?</td>
-            <td>《世界，你好》</td>
-            <td>2017-07-09 18:22:00</td>
-            <td>待审核</td>
-            <td class="text-center">
-              <a href="javascript:void(0);;" class="btn btn-info btn-xs">批准</a>
-              <a href="javascript:void(0);;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr>
-            <td>小右</td>
-            <td>I am fine thank you and you?</td>
-            <td>《世界，你好》</td>
-            <td>2017-07-11 22:22:00</td>
-            <td>已批准</td>
-            <td class="text-center">
-              <a href="javascript:void(0);;" class="btn btn-warning btn-xs">拒绝</a>
-              <a href="javascript:void(0);;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr>
-            <td>哈哈</td>
-            <td>一针见血</td>
-            <td>《世界，你好》</td>
-            <td>2017-07-22 09:10:00</td>
-            <td>已批准</td>
-            <td class="text-center">
-              <a href="javascript:void(0);;" class="btn btn-warning btn-xs">拒绝</a>
-              <a href="javascript:void(0);;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr>
-            <td>武秀英</td>
-            <td>外影广条同取水权科速工与。矿身面却属次养导务作者用品油调。高石期品极放存斗一号口消别共去。</td>
-            <td>《世界，你好》</td>
-            <td>1970-03-15 11:31:50</td>
-            <td>已拒绝</td>
-            <td class="text-center">
-              <a href="javascript:void(0);;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr>
-            <td>胡娟</td>
-            <td>采参什正面准观提干在易东统。走部系取团商机酸科往证和流物实则。入程用指学行利划影现清关织方。</td>
-            <td>《第四篇示例文章》</td>
-            <td>1970-03-23 14:16:57</td>
-            <td>已拒绝</td>
-            <td class="text-center">
-              <a href="javascript:void(0);;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr>
-            <td>邵艳</td>
-            <td>国新研目心思力品家织通还如周气长多。话它思造约众系压程它过去全。必导则达发前何西最老四关向。</td>
-            <td>《第一篇示例文章》</td>
-            <td>1970-04-19 12:34:27</td>
-            <td>已拒绝</td>
-            <td class="text-center">
-              <a href="javascript:editTr( 'trashed',10 );" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr>
-            <td>唐军</td>
-            <td>好联律物联使进很们有严这里月之。实养件矿商除政究定划必火起划六。内百那则变次引持只情车各地织持。</td>
-            <td>《第四篇示例文章》</td>
-            <td>1970-04-24 11:22:29</td>
-            <td>已批准</td>
-            <td class="text-center">
-              <a href="javascript:editTr( 'rejected',11 );" class="btn btn-warning btn-xs">拒绝</a>
-              <a href="javascript:editTr( 'trashed',11 );" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
+          <!-- 渲染出来的所有评论 -->
         </tbody>
       </table>
       <div class="row text-center">
         <ul class="pagination pagination-sm">
-          <li class="page-item first disabled"><a href="#" class="page-link">首页</a></li>
-          <li class="page-item prev disabled"><a href="#" class="page-link">上一页</a></li>
-          <li class="page-item active"><a href="#" class="page-link">1</a></li>
-          <li class="page-item"><a href="#" class="page-link">2</a></li>
-          <li class="page-item"><a href="#" class="page-link">3</a></li>
-          <li class="page-item"><a href="#" class="page-link">4</a></li>
-          <li class="page-item"><a href="#" class="page-link">5</a></li>
-          <li class="page-item"><a href="#" class="page-link">6</a></li>
-          <li class="page-item"><a href="#" class="page-link">7</a></li>
-          <li class="page-item next"><a href="#" class="page-link">下一页</a></li>
-          <li class="page-item last"><a href="#" class="page-link">尾页</a></li>
+          <!-- 分页放的位置 -->
         </ul>
         <ul id="pagination" class="pagination-sm"></ul>
       </div>
@@ -161,5 +47,67 @@
     </div>
   </div>
 </body>
+<!-- 定义模板引擎 -->
+<!-- each 后面跟的data.data是存放的数组，我们要对这个数组进行遍历 在渲染的时候还需要将评论的id渲染到删除按钮上，这样在删除的时候服务器需要知道要删除的是哪一条评论-->
+<script type="text/html" id="text">
+  {{each data.data}}
+  <tr class="danger">
+    <td>{{$value.author}}</td>
+    <td>{{$value.content}}</td>
+    <td>{{$value.title}}</td>
+    <td>{{$value.date}}</td>
+    <td>{{$value.state}}</td>
+    <td class="text-center">
+      <a href="javascript:void(0);;" class="btn btn-info btn-xs">批准</a>
+      <a href="javascript:void(0);;" class="btn btn-danger btn-xs" data-id="{{$value.id}}">删除</a>
+    </td>
+  </tr>
+  {{/each}}
+</script>
+<script>
+  // jquery的入口函数
+  $(function() {
+    // 需求：当页面进行加载的时候就要想服务器发送请求，需要向服务器获取参数       BigNew.comment_list
+    // 分析：我们使用ajax技术向服务器发送请求
+    $.ajax({
+      // 设置请求url地址
+      url: BigNew.comment_list,
+      // 设置请求方式
+      type: 'get',
+      // 这里其实是有个请求参数的，当page perpage这两个参数不写的话，那么就是采用默认值，page的默认值是显示的是当前页，perpage的默认值是每页显示的评论的条数，默认是每页显示6条
+      // 响应服务器返回的数据
+      success: function(result) {
+        console.log(result);
+        // 我们要将从服务器获取到的数据渲染到页面上，我们使用模板引擎的方式渲染到页面上
+        // 我们调用模板引擎中的一个template方法，这个方法中需要传入两个参数，第一个参数是模板的id名字，第二个参数是获取到的数据result，这里要注意，传入的第二个参数必须是对象类型的参数，这是template这个方法规定的
+        var str = template('text', result);
+        // 最后将已经整合好的数据str放到tbody这个标签中
+        $('tbody').html(str);
+      }
+    });
+
+
+
+
+
+    // 需求：点击删除按钮的时候将当前的这条评论进行删除
+    // 分析：当我们点击评论管理页面的时候需要给从服务器发送请求，获取所有的评论，并且显示到页面上，所以这些评论都是后面显示到页面上的，对于后期显示到页面上的东西，我们给这些元素添加事件的话，我们就要使用事件委托来将事件注册给这些元素的父节点
+    // 我们可以给tbody这个标签注册点击事件
+    $('tbody').on('click', '.btn-danger', function() {
+      // 测试一下，看看删除按钮能不能触发事件
+      // alert('我被点击了');
+      // 获取当前删除按钮上的自定义属性的id值 data-id = '';
+      var id = $(this).attr('data-id');
+      // 测试一下，看看能不能拿到当前按钮上的自定义data-id的值
+      console.log('当前按钮的id值是:' + id);
+
+
+    })
+
+
+
+    // 
+  })
+</script>
 
 </html>
