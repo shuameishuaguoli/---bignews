@@ -67,25 +67,29 @@
 <script>
   // jquery的入口函数
   $(function() {
-    // 需求：当页面进行加载的时候就要想服务器发送请求，需要向服务器获取参数       BigNew.comment_list
-    // 分析：我们使用ajax技术向服务器发送请求
-    $.ajax({
-      // 设置请求url地址
-      url: BigNew.comment_list,
-      // 设置请求方式
-      type: 'get',
-      // 这里其实是有个请求参数的，当page perpage这两个参数不写的话，那么就是采用默认值，page的默认值是显示的是当前页，perpage的默认值是每页显示的评论的条数，默认是每页显示6条
-      // 响应服务器返回的数据
-      success: function(result) {
-        console.log(result);
-        // 我们要将从服务器获取到的数据渲染到页面上，我们使用模板引擎的方式渲染到页面上
-        // 我们调用模板引擎中的一个template方法，这个方法中需要传入两个参数，第一个参数是模板的id名字，第二个参数是获取到的数据result，这里要注意，传入的第二个参数必须是对象类型的参数，这是template这个方法规定的
-        var str = template('text', result);
-        // 最后将已经整合好的数据str放到tbody这个标签中
-        $('tbody').html(str);
-      }
-    });
-
+    // 将获取所有的评论数据封装成一个函数
+    function get_Pinglun() {
+      // 需求：当页面进行加载的时候就要想服务器发送请求，需要向服务器获取参数       BigNew.comment_list
+      // 分析：我们使用ajax技术向服务器发送请求
+      $.ajax({
+        // 设置请求url地址
+        url: BigNew.comment_list,
+        // 设置请求方式
+        type: 'get',
+        // 这里其实是有个请求参数的，当page perpage这两个参数不写的话，那么就是采用默认值，page的默认值是显示的是当前页，perpage的默认值是每页显示的评论的条数，默认是每页显示6条
+        // 响应服务器返回的数据
+        success: function(result) {
+          console.log(result);
+          // 我们要将从服务器获取到的数据渲染到页面上，我们使用模板引擎的方式渲染到页面上
+          // 我们调用模板引擎中的一个template方法，这个方法中需要传入两个参数，第一个参数是模板的id名字，第二个参数是获取到的数据result，这里要注意，传入的第二个参数必须是对象类型的参数，这是template这个方法规定的
+          var str = template('text', result);
+          // 最后将已经整合好的数据str放到tbody这个标签中
+          $('tbody').html(str);
+        }
+      });
+    }
+    // 加载页面的时候先调用一下get_Pinglun()这个方法
+    get_Pinglun();
 
 
 
@@ -94,16 +98,45 @@
     // 分析：当我们点击评论管理页面的时候需要给从服务器发送请求，获取所有的评论，并且显示到页面上，所以这些评论都是后面显示到页面上的，对于后期显示到页面上的东西，我们给这些元素添加事件的话，我们就要使用事件委托来将事件注册给这些元素的父节点
     // 我们可以给tbody这个标签注册点击事件
     $('tbody').on('click', '.btn-danger', function() {
-      // 测试一下，看看删除按钮能不能触发事件
-      // alert('我被点击了');
-      // 获取当前删除按钮上的自定义属性的id值 data-id = '';
-      var id = $(this).attr('data-id');
-      // 测试一下，看看能不能拿到当前按钮上的自定义data-id的值
-      console.log('当前按钮的id值是:' + id);
-
-
+      // 点击删除按钮的时候先询问一下用户
+      var firm = confirm('确定要删除吗？');
+      // 如果用户点击的是取消，则直接终止代码的执行
+      if (!firm) {
+        return;
+      } else { //如果点击的是确定，那么就进入这个分支进行逻辑处理
+        // 测试一下，看看删除按钮能不能触发事件
+        // alert('我被点击了');
+        // 获取当前删除按钮上的自定义属性的id值 data-id = '';
+        var id = $(this).attr('data-id');
+        // 测试一下，看看能不能拿到当前按钮上的自定义data-id的值
+        // console.log('当前按钮的id值是:' + id);
+        // 我们使用ajax将携带这个id向服务器发送请求  BigNew.comment_delete
+        $.ajax({
+          // 设置url请求地址
+          url: BigNew.comment_delete,
+          // 设置请求方式
+          type: 'post',
+          // 设置请求参数
+          data: {
+            id: id,
+          },
+          // 响应服务器的数据
+          success: function(result) {
+            // console.log(result);
+            // 为了给用户一个良好的体验，要给用户一个提示，如果成功了，就刷新一下页面，再次调用这个获取评论的方法
+            if (result.code == 200) {
+              alert('数据删除成功~~');
+              //删除成功之后，调用一下获取所有评论的方法
+              get_Pinglun();
+            } else {
+              alert('数据删除失败~~');
+            }
+          }
+        });
+      }
     })
 
+    // 需求：要给页面添加一个分页的功能
 
 
     // 
